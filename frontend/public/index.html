@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Taskify — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body class="bg-primary-dark min-h-screen flex items-center justify-center p-4 font-sans">
+
+  <div class="relative w-full max-w-4xl bg-white rounded-xl2 shadow-2xl overflow-hidden flex min-h-[560px]">
+
+    <!-- Left: layered diagonal vector artwork -->
+    <div class="relative hidden md:block w-2/5 bg-primary-dark overflow-hidden">
+      <div class="absolute inset-0">
+        <div class="absolute -left-1/4 top-0 w-[140%] h-[140%] bg-primary-light/40 rotate-45 origin-top-left"></div>
+        <div class="absolute -left-1/3 top-1/4 w-[140%] h-[140%] bg-primary/70 rotate-45 origin-top-left"></div>
+        <div class="absolute -left-1/2 top-1/2 w-[140%] h-[140%] bg-white/10 rotate-45 origin-top-left"></div>
+      </div>
+
+      <!-- tab switcher -->
+      <div class="absolute right-0 top-16 flex flex-col items-end z-10">
+        <button id="tabLogin" class="tab-btn w-40 text-right pr-8 py-3 bg-white text-primary font-bold rounded-l-full mb-1 shadow-md">
+          LOGIN
+        </button>
+        <button id="tabSignin" class="tab-btn w-40 text-right pr-8 py-3 text-white/80 font-semibold">
+          SIGN IN
+        </button>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="flex-1 flex flex-col items-center justify-center px-8 py-10 md:px-14">
+      <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary-light to-primary flex items-center justify-center mb-4 shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+      </div>
+      <h1 id="formTitle" class="text-2xl font-bold text-primary mb-8 tracking-wide">LOGIN</h1>
+
+      <form id="authForm" class="w-full max-w-sm">
+        <div id="nameField" class="mb-6 hidden">
+          <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0" /></svg>
+            <input type="text" id="name" name="name" placeholder="Full name" class="input-field" />
+          </div>
+        </div>
+
+        <div id="roleField" class="mb-6 hidden">
+          <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18a47.42 47.42 0 01-8.756 0c-1.085-.144-1.872-1.086-1.872-2.18v-4.25M12 8.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM3.75 14.15c0-1.594 1.028-2.984 2.545-3.44a48.376 48.376 0 0111.41 0c1.517.456 2.545 1.846 2.545 3.44" /></svg>
+            <input type="text" id="role" name="role" placeholder="Job title / role (e.g. UI/UX Designer)" class="input-field" />
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+            <input type="email" id="email" name="email" placeholder="Email" required class="input-field" />
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <div class="flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+            <input type="password" id="password" name="password" placeholder="Password" required class="input-field" />
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center mt-3 mb-8 text-sm">
+          <a href="#" class="text-primary hover:underline">Forgot Password?</a>
+          <button type="submit" class="btn-primary">
+            <span id="submitLabel">LOGIN</span>
+          </button>
+        </div>
+
+        <p id="formError" class="text-danger text-sm mb-4 hidden"></p>
+      </form>
+
+      <div class="w-full max-w-sm border-t border-gray-100 pt-5 flex items-center justify-center gap-8 text-sm text-ink-muted">
+        <span>Or Login With</span>
+        <span class="flex items-center gap-1 cursor-pointer hover:text-primary">
+          <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.85A11 11 0 0012 23z"/><path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 010-4.2V7.05H2.18a11 11 0 000 9.9l3.66-2.85z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1a11 11 0 00-9.82 6.05l3.66 2.85C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
+          Google
+        </span>
+        <span class="flex items-center gap-1 cursor-pointer hover:text-primary">
+          <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#1877F2" d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+          Facebook
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Taskify — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body class="bg-surface font-sans text-ink min-h-screen">
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-60 bg-white border-r border-gray-100 flex flex-col py-6 px-4 shrink-0">
+      <div class="flex items-center gap-2 px-2 mb-10">
+        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold">T</div>
+        <span class="text-xl font-bold text-primary">Taskify</span>
+      </div>
+
+      <nav class="flex flex-col gap-1 flex-1">
+        <a class="nav-link active" data-view="dashboard">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+          Dashboard
+        </a>
+        <a class="nav-link" data-view="track">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Track
+        </a>
+        <a class="nav-link" data-view="projects">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-19.5 0v6a2.25 2.25 0 002.25 2.25h15a2.25 2.25 0 002.25-2.25v-6m-19.5 0h19.5M6.75 9.75V6.108c0-1.135.845-2.098 1.976-2.192a48.424 48.424 0 011.548-.108h3.452c.522 0 1.043.036 1.548.108 1.13.094 1.976 1.057 1.976 2.192V9.75" /></svg>
+          Projects
+        </a>
+        <a class="nav-link" data-view="reports">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+          Reports
+        </a>
+      </nav>
+
+      <div class="flex flex-col gap-1 border-t border-gray-100 pt-4">
+        <a class="nav-link" data-view="support">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          Support
+        </a>
+        <a class="nav-link" data-view="settings">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /></svg>
+          Settings
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+      <!-- Header -->
+      <header class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold">Hi, <span id="greetName">there</span></h1>
+          <p class="text-primary text-sm font-medium">Let's finish your task today!</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="relative w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
+            <svg class="w-5 h-5 text-ink-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" /></svg>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full"></span>
+          </button>
+          <button id="logoutBtn" class="text-sm text-ink-muted hover:text-danger font-medium">Log out</button>
+        </div>
+      </header>
+
+      <div id="dashboardView" class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+        <!-- Left/center column -->
+        <div class="xl:col-span-3 flex flex-col gap-6">
+
+          <!-- Hero -->
+          <section class="card bg-gradient-to-r from-primary to-primary-dark text-white flex items-center justify-between overflow-hidden">
+            <div class="max-w-xs">
+              <h2 class="text-xl font-bold mb-1">Today Task</h2>
+              <p class="text-white/80 text-sm mb-4">Check your daily tasks and schedules</p>
+              <button class="bg-white text-primary font-semibold rounded-full px-5 py-2 text-sm shadow">Today's schedule</button>
+            </div>
+            <svg class="w-32 h-32 opacity-90 hidden sm:block" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="35" r="14" fill="#fff" opacity="0.9"/>
+              <rect x="30" y="50" width="40" height="35" rx="8" fill="#fff" opacity="0.7"/>
+              <rect x="15" y="60" width="14" height="20" rx="3" fill="#fff" opacity="0.5"/>
+              <rect x="70" y="55" width="14" height="25" rx="3" fill="#fff" opacity="0.5"/>
+            </svg>
+          </section>
+
+          <!-- Task cards -->
+          <section class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold">Your Tasks</h3>
+              <button id="toggleAddTask" class="text-xs bg-primary text-white font-semibold rounded-full px-4 py-2">+ Add Task</button>
+            </div>
+
+            <form id="addTaskForm" class="hidden card flex-col gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input type="text" id="taskTitle" placeholder="Task title" class="text-sm border border-gray-200 rounded-lg px-3 py-2" />
+                <input type="text" id="taskCategory" placeholder="Category (e.g. Designing)" class="text-sm border border-gray-200 rounded-lg px-3 py-2" />
+                <input type="date" id="taskDueDate" class="text-sm border border-gray-200 rounded-lg px-3 py-2" />
+                <input type="number" id="taskProgress" min="0" max="100" placeholder="Progress % (optional, default 0)" class="text-sm border border-gray-200 rounded-lg px-3 py-2" />
+              </div>
+              <div class="flex gap-2">
+                <button type="submit" class="flex-1 bg-primary text-white text-sm font-semibold rounded-lg py-2">Create Task</button>
+                <button type="button" id="cancelAddTask" class="flex-1 border border-gray-200 text-ink-muted text-sm font-semibold rounded-lg py-2">Cancel</button>
+              </div>
+              <p id="taskFormError" class="text-danger text-xs hidden"></p>
+            </form>
+
+            <div id="taskCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- populated by dashboard.js -->
+            </div>
+          </section>
+
+          <!-- Tasks progress chart + assignments -->
+          <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold">Tasks Progress</h3>
+                <button id="toggleLogHours" class="text-xs bg-primary text-white font-semibold rounded-full px-3 py-1.5">+ Log Hours</button>
+              </div>
+
+              <form id="logHoursForm" class="hidden gap-2 mb-4 items-center">
+                <input type="number" id="logHoursInput" min="0" max="24" step="0.5" placeholder="Hours worked today" class="flex-1 text-xs border border-gray-200 rounded-lg px-3 py-2" />
+                <button type="submit" class="bg-primary text-white text-xs font-semibold rounded-lg px-3 py-2">Save</button>
+                <button type="button" id="cancelLogHours" class="border border-gray-200 text-ink-muted text-xs font-semibold rounded-lg px-3 py-2">Cancel</button>
+              </form>
+              <p id="logHoursError" class="text-danger text-[11px] hidden mb-2"></p>
+
+              <div id="chartBars" class="flex items-end gap-3 h-40 mb-2">
+                <!-- populated by dashboard.js -->
+              </div>
+              <div class="flex justify-between text-xs text-ink-muted px-1" id="chartLabels"></div>
+
+              <div class="grid grid-cols-3 gap-3 mt-5 text-center">
+                <div class="bg-primary-pale rounded-xl p-3">
+                  <p class="text-xs text-ink-muted mb-1">Time spent</p>
+                  <p id="statTimeSpent" class="font-bold text-sm">0h</p>
+                </div>
+                <div class="bg-primary-pale rounded-xl p-3">
+                  <p class="text-xs text-ink-muted mb-1">Days logged</p>
+                  <p id="statDaysLogged" class="font-bold text-sm">0/7</p>
+                </div>
+                <div class="bg-primary-pale rounded-xl p-3">
+                  <p class="text-xs text-ink-muted mb-1">Avg / day</p>
+                  <p id="statAvgPerDay" class="font-bold text-sm">0h</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold">Assignments</h3>
+                <div class="flex items-center gap-2">
+                  <span id="assignmentSummary" class="text-xs bg-primary-pale text-primary font-semibold px-2 py-1 rounded-full">0/0</span>
+                  <button id="toggleAddAssignment" class="text-xs text-primary font-semibold">+ Add</button>
+                </div>
+              </div>
+
+              <form id="addAssignmentForm" class="hidden flex-col gap-2 mb-4">
+                <input type="text" id="assignmentTitle" placeholder="Assignment title" class="w-full text-xs border border-gray-200 rounded-lg px-3 py-2" />
+                <div class="grid grid-cols-2 gap-2">
+                  <input type="date" id="assignmentDueDate" class="text-xs border border-gray-200 rounded-lg px-3 py-2" />
+                  <input type="text" id="assignmentGrade" placeholder="Grade (optional)" class="text-xs border border-gray-200 rounded-lg px-3 py-2" />
+                </div>
+                <div class="flex gap-2">
+                  <button type="submit" class="flex-1 bg-primary text-white text-xs font-semibold rounded-lg py-2">Add</button>
+                  <button type="button" id="cancelAddAssignment" class="flex-1 border border-gray-200 text-ink-muted text-xs font-semibold rounded-lg py-2">Cancel</button>
+                </div>
+                <p id="assignmentFormError" class="text-danger text-[11px] hidden"></p>
+              </form>
+
+              <ul id="assignmentList" class="flex flex-col gap-3">
+                <!-- populated by dashboard.js -->
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right sidebar -->
+        <aside class="flex flex-col gap-6">
+          <div class="card flex items-center gap-3">
+            <div id="profileAvatar" class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold text-lg shrink-0"></div>
+            <div>
+              <p id="profileName" class="font-semibold text-sm">—</p>
+              <p id="profileRole" class="text-xs text-ink-muted">—</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 id="calendarMonthLabel" class="font-bold text-sm">—</h3>
+              <button id="calendarAddTaskLink" class="text-xs text-primary font-semibold">+ Add Task</button>
+            </div>
+            <div id="calendarGrid" class="grid grid-cols-7 text-center text-xs mb-4">
+              <!-- populated by dashboard.js from the real current date -->
+            </div>
+            <p class="text-[11px] text-ink-muted">Today's schedule will appear here once you add tasks with due times.</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold text-sm">Batchmates</h3>
+              <button id="toggleAddBatchmate" class="text-xs text-primary font-semibold">+ Add</button>
+            </div>
+
+            <form id="addBatchmateForm" class="hidden flex-col gap-2 mb-4">
+              <input type="text" id="batchmateName" placeholder="Name" class="w-full text-xs border border-gray-200 rounded-lg px-3 py-2" />
+              <input type="text" id="batchmateRole" placeholder="Role (e.g. Backend Engineer)" class="w-full text-xs border border-gray-200 rounded-lg px-3 py-2" />
+              <div class="flex gap-2">
+                <button type="submit" class="flex-1 bg-primary text-white text-xs font-semibold rounded-lg py-2">Add</button>
+                <button type="button" id="cancelAddBatchmate" class="flex-1 border border-gray-200 text-ink-muted text-xs font-semibold rounded-lg py-2">Cancel</button>
+              </div>
+              <p id="batchmateFormError" class="text-danger text-[11px] hidden"></p>
+            </form>
+
+            <ul id="batchmateList" class="flex flex-col gap-3">
+              <!-- populated by dashboard.js -->
+            </ul>
+            <p id="batchmateEmpty" class="text-[11px] text-ink-muted hidden">No team members yet — add one above.</p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Track: editable list of all tasks with live progress updates -->
+      <div id="trackView" class="hidden flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold">Track</h2>
+          <p class="text-sm text-ink-muted">Update progress on any task directly.</p>
+        </div>
+        <div id="trackList" class="flex flex-col gap-3">
+          <!-- populated by dashboard.js -->
+        </div>
+        <p id="trackEmpty" class="hidden card text-center text-sm text-ink-muted py-10">No tasks yet — add one from the Dashboard.</p>
+      </div>
+
+      <!-- Projects: tasks grouped by category, with aggregate progress -->
+      <div id="projectsView" class="hidden flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold">Projects</h2>
+          <p class="text-sm text-ink-muted">Your tasks grouped by category.</p>
+        </div>
+        <div id="projectsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- populated by dashboard.js -->
+        </div>
+        <p id="projectsEmpty" class="hidden card text-center text-sm text-ink-muted py-10">No tasks yet — add one from the Dashboard to see it grouped here by category.</p>
+      </div>
+
+      <!-- Reports: real aggregate stats from GET /api/reports/summary -->
+      <div id="reportsView" class="hidden flex-col gap-4">
+        <h2 class="text-xl font-bold">Reports</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="card text-center">
+            <p class="text-xs text-ink-muted mb-1">Total tasks</p>
+            <p id="reportTaskCount" class="text-2xl font-bold text-primary">0</p>
+          </div>
+          <div class="card text-center">
+            <p class="text-xs text-ink-muted mb-1">Avg. progress</p>
+            <p id="reportAvgProgress" class="text-2xl font-bold text-primary">0%</p>
+          </div>
+          <div class="card text-center">
+            <p class="text-xs text-ink-muted mb-1">Assignments done</p>
+            <p id="reportAssignments" class="text-2xl font-bold text-primary">0/0</p>
+          </div>
+          <div class="card text-center">
+            <p class="text-xs text-ink-muted mb-1">Hours logged</p>
+            <p id="reportHours" class="text-2xl font-bold text-primary">0h</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="font-bold mb-4">Progress by category</h3>
+          <div id="reportCategoryList" class="flex flex-col gap-3">
+            <!-- populated by dashboard.js -->
+          </div>
+          <p id="reportCategoryEmpty" class="hidden text-sm text-ink-muted">No tasks yet.</p>
+        </div>
+      </div>
+
+      <!-- Settings: real profile edit + password change -->
+      <div id="settingsView" class="hidden flex-col gap-6 max-w-lg">
+        <h2 class="text-xl font-bold">Settings</h2>
+
+        <div class="card">
+          <h3 class="font-bold mb-4">Profile</h3>
+          <form id="profileForm" class="flex flex-col gap-3">
+            <div>
+              <label class="text-xs text-ink-muted">Full name</label>
+              <input type="text" id="settingsName" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 mt-1" />
+            </div>
+            <div>
+              <label class="text-xs text-ink-muted">Job title / role</label>
+              <input type="text" id="settingsRole" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 mt-1" />
+            </div>
+            <button type="submit" class="btn-primary self-start !px-6 !py-2 text-sm">Save changes</button>
+            <p id="profileFormSuccess" class="text-success text-xs hidden">Profile updated.</p>
+            <p id="profileFormError" class="text-danger text-xs hidden"></p>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3 class="font-bold mb-4">Change password</h3>
+          <form id="passwordForm" class="flex flex-col gap-3">
+            <input type="password" id="currentPassword" placeholder="Current password" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2" />
+            <input type="password" id="newPassword" placeholder="New password (min 8 characters)" class="w-full text-sm border border-gray-200 rounded-lg px-3 py-2" />
+            <button type="submit" class="btn-primary self-start !px-6 !py-2 text-sm">Update password</button>
+            <p id="passwordFormSuccess" class="text-success text-xs hidden">Password updated.</p>
+            <p id="passwordFormError" class="text-danger text-xs hidden"></p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Support: genuine usage guide, no fabricated ticket system -->
+      <div id="supportView" class="hidden flex-col gap-4 max-w-2xl">
+        <h2 class="text-xl font-bold">Support</h2>
+        <div class="card flex flex-col gap-4 text-sm">
+          <div>
+            <p class="font-semibold mb-1">Adding a task</p>
+            <p class="text-ink-muted">On the Dashboard, click <span class="font-semibold text-primary">+ Add Task</span> above your task cards. Set a due date to have "days left" calculated automatically.</p>
+          </div>
+          <div>
+            <p class="font-semibold mb-1">Logging hours</p>
+            <p class="text-ink-muted">On the Dashboard's Tasks Progress card, click <span class="font-semibold text-primary">+ Log Hours</span>. Hours are added to today's real weekday bar in the chart.</p>
+          </div>
+          <div>
+            <p class="font-semibold mb-1">Tracking progress</p>
+            <p class="text-ink-muted">Use the <span class="font-semibold text-primary">Track</span> section in the sidebar to update any task's progress percentage directly.</p>
+          </div>
+          <div>
+            <p class="font-semibold mb-1">Adding team members</p>
+            <p class="text-ink-muted">On the Dashboard's Batchmates card, click <span class="font-semibold text-primary">+ Add</span> and enter their name and role.</p>
+          </div>
+          <div>
+            <p class="font-semibold mb-1">Updating your profile</p>
+            <p class="text-ink-muted">Go to <span class="font-semibold text-primary">Settings</span> in the sidebar to change your name, role, or password.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/dashboard.js"></script>
+</body>
+</html>
