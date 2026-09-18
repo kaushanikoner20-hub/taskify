@@ -148,17 +148,15 @@ hardcoded date anywhere in the code.
 Authenticated requests must include `Authorization: Bearer <token>`, using the token returned
 from `/api/auth/login` or `/api/auth/register`.
 
-## Capturing required screenshots
+## What We See
 
 1. **Running containers:** after `docker compose up --build`, run `docker ps` in your terminal
-   and screenshot the output showing all three containers with `Up ... (healthy)` status.
-2. **Active web UI — Login page:** open http://localhost:3000 in a browser and screenshot the
+   and the output will be showing all three containers with `Up ... (healthy)` status.
+2. **Active web UI — Login page:** open http://localhost:3000 in a browser and you will see the
    split-screen login/sign-in screen.
 3. **Active web UI — Dashboard:** register an account (SIGN IN tab), log in, and screenshot the
    dashboard (task cards, progress chart, assignments, calendar showing the real current date,
    batchmates you've added).
-4. Optional: screenshot `docker compose logs backend` showing `Taskify API listening on port 3000`
-   to confirm the database migration ran successfully.
 
 ## Notes on production hardening
 
