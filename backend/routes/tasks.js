@@ -5,7 +5,13 @@ const requireAuth = require('../middleware/auth');
 const router = express.Router();
 router.use(requireAuth);
 
-// GET /api/tasks - list current user's tasks + weekly progress log
+// GET /api/tasks - list current user's tasks + weekly progress log.
+//
+// The progress log ALWAYS returns exactly 7 rows (Mon-Sun), even if the user
+// has only logged hours on one day so far. Days with no logged hours come
+// back with hours = 0. This is what makes the chart render as 7 proper bars
+// instead of one bar stretching to fill the whole width when only 1 row
+// of real data exists.
 router.get('/', async (req, res) => {
   try {
     const tasks = await pool.query(
@@ -13,11 +19,18 @@ router.get('/', async (req, res) => {
        FROM tasks WHERE owner_id = $1 ORDER BY created_at ASC`,
       [req.user.id]
     );
+
     const progressLog = await pool.query(
-      `SELECT day_label, hours FROM task_progress_log
-       WHERE owner_id = $1 ORDER BY sort_order ASC`,
+      `SELECT gs.sort_order,
+              (ARRAY['M','T','W','T','F','S','S'])[gs.sort_order] AS day_label,
+              COALESCE(tpl.hours, 0)::float AS hours
+       FROM generate_series(1, 7) AS gs(sort_order)
+       LEFT JOIN task_progress_log tpl
+         ON tpl.sort_order = gs.sort_order AND tpl.owner_id = $1
+       ORDER BY gs.sort_order ASC`,
       [req.user.id]
     );
+
     res.json({ tasks: tasks.rows, progressLog: progressLog.rows });
   } catch (err) {
     console.error(err);
