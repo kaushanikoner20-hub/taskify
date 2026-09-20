@@ -14,6 +14,7 @@ RUN addgroup -S taskify && adduser -S taskify -G taskify
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json ./
 COPY server.js ./
+COPY app.js ./
 COPY db ./db
 COPY routes ./routes
 COPY middleware ./middleware
