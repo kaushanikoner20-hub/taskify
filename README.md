@@ -39,8 +39,9 @@ consistently across both screens instead of mixing multiple accent colors):
 - **Frontend:** Static HTML + Tailwind CSS (compiled at build time) + vanilla JS, served by Nginx (which also reverse-proxies `/api` to the backend)
 - **Backend:** Node.js + Express, JWT authentication, bcrypt password hashing
 - **Database:** PostgreSQL 16
-- **Orchestration:** Docker Compose (3 services: `frontend`, `backend`, `db`)
+- **Orchestration:** Docker Compose (`frontend`, `backend`, `db`, plus `localstack` for the Terraform assignment — see below)
 - **CI/CD:** GitHub Actions (test → Docker build → Docker Hub push → optional deploy)
+- **Infrastructure as Code:** Terraform + LocalStack (provisions a local S3 bucket — see [Infrastructure Provisioning with Terraform](#infrastructure-provisioning-with-terraform))
 
 ## Project structure
 
@@ -49,6 +50,16 @@ taskify/
 ├── .github/workflows/ci-cd.yml  # GitHub Actions pipeline
 ├── docker-compose.yml
 ├── .env.example
+├── terraform/                    # Terraform + LocalStack (S3) — see below
+│   ├── versions.tf
+│   ├── provider.tf
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   ├── terraform.tfvars.example
+│   └── README.md
+├── docs/                         # Screenshot evidence for the Terraform assignment
+│   └── README.md                 # explains expected screenshot filenames
 ├── backend/
 │   ├── Dockerfile              # multi-stage: deps -> production runtime
 │   ├── package.json
@@ -86,6 +97,7 @@ taskify/
 - Docker Engine 24+
 - Docker Compose v2 (bundled with modern Docker Desktop, or `docker-compose-plugin` on Linux)
 - No local Node.js or PostgreSQL installation is required to *run* the app — everything runs in containers. Node.js 20+ is only needed if you want to run the backend test suite locally.
+- **For the Terraform assignment only:** [Terraform](https://developer.hashicorp.com/terraform/install) 1.5+, and optionally the [AWS CLI](https://aws.amazon.com/cli/) for verification — see [Infrastructure Provisioning with Terraform](#infrastructure-provisioning-with-terraform).
 
 ## Getting started
 
@@ -106,16 +118,18 @@ taskify/
 
    This builds the `backend` and `frontend` images (multi-stage builds), starts PostgreSQL,
    waits for its healthcheck to pass, then starts the backend (which creates the database
-   tables on first boot — no demo data is inserted) and finally the frontend.
+   tables on first boot — no demo data is inserted) and finally the frontend. This also
+   starts `localstack`, used only by the separate Terraform assignment — the app itself
+   works exactly the same whether or not `localstack` is running.
 
-3. Confirm all three containers are healthy:
+3. Confirm all containers are healthy:
 
    ```bash
    docker ps
    ```
 
-   You should see `taskify-db`, `taskify-backend`, and `taskify-frontend` all with a
-   `healthy` status once the start-up grace period elapses.
+   You should see `taskify-db`, `taskify-backend`, `taskify-frontend`, and `taskify-localstack`
+   all with a `healthy` status once the start-up grace period elapses.
 
 4. Open the app:
 
@@ -193,7 +207,7 @@ hardcoded date anywhere in the code.
 
 ## What you'll see
 
-1. **Running containers:** after `docker compose up --build`, run `docker ps` — all three
+1. **Running containers:** after `docker compose up --build`, run `docker ps` — all
    containers should show `Up ... (healthy)`.
 2. **Login page:** open http://localhost:3000 to see the split-screen login/sign-in screen.
 3. **Dashboard:** register an account (SIGN IN tab), log in, and see task cards, progress
@@ -218,6 +232,258 @@ you provision a server and add three secrets. To enable it:
 Once all three secrets exist, the next push to `main` will SSH in and run
 `docker compose pull && docker compose up -d` automatically. Until then, the job runs and
 exits cleanly with a message explaining that deployment is not yet configured.
+
+---
+
+## Infrastructure Provisioning with Terraform
+
+This project uses [Terraform](https://www.terraform.io/) as Infrastructure as Code (IaC) to
+provision a single, local, S3-compatible storage resource through
+[LocalStack](https://www.localstack.cloud/) — an AWS-compatible emulator that runs entirely
+on your machine. **This is a separate, self-contained demonstration of Terraform** and is not
+wired into the running Taskify application itself; the frontend and backend never read from
+or write to this bucket. Its purpose is purely to show infrastructure provisioning, plan/apply/
+destroy, and state management, without requiring a real (and potentially billable) AWS account.
+
+### Architecture
+
+```
+                  ┌─────────────────┐
+                  │     Taskify     │
+                  │                 │
+                  │ Frontend        │
+                  │ Backend         │
+                  │ PostgreSQL      │
+                  └────────┬────────┘
+                           │
+                           │  (independent — not connected)
+                           │
+                  ┌────────▼────────┐
+                  │    LocalStack   │
+                  │                 │
+                  │   S3 Service    │
+                  └────────▲────────┘
+                           │
+                           │
+                    ┌──────┴──────┐
+                    │ Terraform   │
+                    │              │
+                    │ Plan/Apply   │
+                    └──────────────┘
+```
+
+LocalStack runs as a `localstack` service in the existing `docker-compose.yml` (rather than
+a separate Docker setup), exposing port `4566`. Terraform, run from your host machine, talks
+to that port to create/destroy the S3 bucket.
+
+### Why Terraform?
+
+Infrastructure as Code means describing infrastructure (servers, storage, networking) as
+version-controlled configuration files instead of clicking through a cloud console by hand.
+The same `.tf` files can be reviewed in a pull request, reused across environments, and
+re-applied to reproduce identical infrastructure — instead of undocumented manual steps that
+are easy to forget or get wrong.
+
+### Why LocalStack?
+
+LocalStack emulates AWS services (S3, DynamoDB, Lambda, and many more) entirely on your own
+machine. Terraform's AWS provider can be pointed at LocalStack's local endpoint instead of
+real AWS, so this project can demonstrate genuine `plan`/`apply`/`destroy` infrastructure
+provisioning without an AWS account, without any billing risk, and without needing internet
+access to AWS at all.
+
+**A note on LocalStack versioning:** In March 2026, LocalStack changed its distribution
+policy — every LocalStack Docker image released after that point requires creating a free
+LocalStack account and setting a `LOCALSTACK_AUTH_TOKEN` just to start the container, even
+for non-commercial/community use. To keep this project genuinely zero-signup and
+zero-token, `docker-compose.yml` deliberately pins `localstack/localstack:4.14.0` — the last
+version released before that policy took effect. If you'd prefer to use a newer LocalStack
+version and don't mind creating a free account, get a token at
+[app.localstack.cloud](https://app.localstack.cloud), set it as `LOCALSTACK_AUTH_TOKEN` in
+`docker-compose.yml`'s `localstack` service, and update the image tag.
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+- [Terraform](https://developer.hashicorp.com/terraform/install) 1.5 or newer
+- AWS CLI (optional, only needed for the verification step below)
+
+### Project Structure
+
+```
+terraform/
+├── versions.tf              # Terraform + AWS provider version constraints
+├── provider.tf              # AWS provider configured to talk to LocalStack
+├── main.tf                  # The S3 bucket resource itself
+├── variables.tf              # project_name, environment, bucket_name, aws_region, localstack_endpoint
+├── outputs.tf                # bucket_name, bucket_arn, environment
+└── terraform.tfvars.example  # copy to terraform.tfvars before running
+```
+
+### Starting LocalStack
+
+```bash
+docker compose up -d localstack
+```
+
+Wait for it to report healthy:
+
+```bash
+docker ps
+```
+
+`taskify-localstack` should show `Up ... (healthy)`.
+
+### Terraform Initialization
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+```
+
+`init` downloads the AWS provider plugin (pinned in `versions.tf`) and sets up the local
+`.terraform/` working directory. It's required once per clone, and again any time
+`versions.tf` changes.
+
+### Formatting
+
+```bash
+terraform fmt
+```
+
+Rewrites the `.tf` files into Terraform's canonical formatting style (consistent indentation
+and spacing) — purely cosmetic, has no effect on what gets provisioned.
+
+### Validation
+
+```bash
+terraform validate
+```
+
+Checks the configuration for internal consistency (correct syntax, valid references between
+resources/variables) without contacting LocalStack or provisioning anything.
+
+### Plan
+
+```bash
+terraform plan
+```
+
+`plan` computes and displays exactly what Terraform *would* do — in this case, create one
+`aws_s3_bucket` — without actually making any changes. This is the safe way to review changes
+before committing to them.
+
+### Apply
+
+```bash
+terraform apply
+```
+
+`apply` executes the plan: it actually creates the S3 bucket inside LocalStack. You'll be
+prompted to type `yes` to confirm (or pass `-auto-approve` to skip the prompt). Once complete,
+Terraform prints the three outputs defined in `outputs.tf`.
+
+### Verify
+
+Confirm the bucket genuinely exists inside LocalStack (not just that Terraform *said* it
+created it):
+
+```bash
+aws --endpoint-url=http://localhost:4566 s3 ls
+```
+
+You should see the bucket name (by default `taskify-storage-local`) in the output. To inspect
+just that one bucket:
+
+```bash
+aws --endpoint-url=http://localhost:4566 s3api head-bucket --bucket taskify-storage-local
+```
+
+### Terraform State
+
+```
+Configuration
+      ↓
+Terraform
+      ↓
+State
+      ↓
+Infrastructure
+```
+
+- **What `terraform.tfstate` is:** a JSON file Terraform writes after every `apply`. It's
+  Terraform's record of exactly what infrastructure it created and with what configuration —
+  effectively a map from your `.tf` resource blocks to the real (or, here, LocalStack-emulated)
+  resources they correspond to.
+- **Why Terraform needs it:** without state, Terraform would have no way to know that
+  `aws_s3_bucket.taskify_storage` in your config corresponds to a bucket that already exists —
+  every `apply` would try to create it again. State is also what lets Terraform compute a
+  diff on `plan` (what changed between your config and what's actually deployed) and what it
+  reads to know what to remove on `destroy`.
+- **Resource tracking & drift detection:** on every `plan`/`apply`, Terraform refreshes its
+  state by checking the real infrastructure's current condition. If someone manually changed
+  or deleted the bucket outside of Terraform, that's called *drift* — Terraform detects it by
+  comparing the live resource against what state says should exist, and will offer to
+  reconcile the difference.
+- **Why state should not be committed to Git:** state files can contain sensitive data
+  (resource IDs, sometimes secrets or connection strings depending on the resource type), get
+  out of sync easily if edited by hand or merged via Git, and are not meant to be
+  human-edited. Two people applying from stale, divergently-committed state files is a classic
+  way to corrupt real infrastructure. `.gitignore` in this repo excludes `*.tfstate` and
+  `*.tfstate.*` for exactly this reason.
+- **Local vs. remote state:** this project uses **local state** — a `terraform.tfstate` file
+  sitting on your own machine in `terraform/`, which is fine for solo, local-only work like
+  this assignment. **Remote state** (e.g. state stored in an S3 bucket with DynamoDB
+  locking, or in Terraform Cloud) is what a team/production environment should use instead —
+  it gives everyone a single shared source of truth, prevents two people from applying
+  simultaneously and corrupting state (via locking), and keeps state off individual laptops.
+
+### Variables
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `project_name` | `taskify` | Prefix used when building the final bucket name |
+| `environment` | `local` | Environment label — suffixed onto the bucket name and applied as a tag |
+| `bucket_name` | `storage` | Short/base name for the bucket — combined with `project_name` and `environment` |
+| `aws_region` | `us-east-1` | Region the AWS provider is configured with (LocalStack doesn't host real regions, but the provider still requires a syntactically valid one) |
+| `localstack_endpoint` | `http://localhost:4566` | URL where LocalStack's S3 service is reachable |
+
+The final bucket name is built as `<project_name>-<bucket_name>-<environment>` (e.g.
+`taskify-storage-local`) — change any of the three in `terraform.tfvars` to get a different
+name without touching `main.tf`.
+
+### Outputs
+
+After a successful `apply`, Terraform prints:
+
+- **`bucket_name`** — the actual name of the created bucket
+- **`bucket_arn`** — its ARN (Amazon Resource Name), LocalStack's emulated equivalent of a
+  real AWS ARN
+- **`environment`** — the environment value that was used, echoed back for confirmation
+
+### Destroy
+
+```bash
+terraform destroy
+```
+
+Removes everything Terraform created (the S3 bucket), using the state file to know exactly
+what to remove. Destroying disposable test infrastructure like this matters even locally: it
+keeps LocalStack's state clean between runs, verifies your Terraform config can cleanly tear
+down what it built (a real, useful test of the configuration itself), and mirrors the habit
+you want in real cloud environments, where leaving unused resources running costs real money.
+
+### Screenshots / Evidence
+
+See [`docs/README.md`](docs/README.md) for the exact filenames and what each screenshot
+should show. In short:
+
+1. `docs/terraform-plan.png` — `terraform plan` showing the bucket will be created
+2. `docs/terraform-apply.png` — `terraform apply` showing successful creation + outputs
+3. `docs/localstack-s3.png` — `aws --endpoint-url=http://localhost:4566 s3 ls` showing the bucket really exists
+4. `docs/terraform-destroy.png` *(optional)* — `terraform destroy` showing successful teardown
 
 ## Notes on production hardening
 

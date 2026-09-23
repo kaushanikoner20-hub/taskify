@@ -1,0 +1,12 @@
+# Copy this file to terraform.tfvars before running terraform plan/apply.
+# terraform.tfvars itself is gitignored (see ../.gitignore) since, in a real
+# project, it can end up holding environment-specific or sensitive values.
+# For this LocalStack-only setup there's nothing secret in it, but keeping
+# the same .gitignore convention is good practice regardless.
+
+project_name = "taskify"
+environment  = "local"
+bucket_name  = "storage"
+aws_region   = "us-east-1"
+
+localstack_endpoint = "http://localhost:4566"

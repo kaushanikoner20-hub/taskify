@@ -3,3 +3,36 @@ node_modules/
 *.log
 .DS_Store
 frontend/public/css/styles.css
+
+# --- Terraform ---
+# .terraform/ holds downloaded provider binaries/plugins - large, and
+# always redownloadable from versions.tf via `terraform init`.
+.terraform/
+
+# Terraform state files contain the full, sometimes sensitive, snapshot
+# of provisioned infrastructure. Never committed - see the "Terraform
+# State" section in the root README for why.
+*.tfstate
+*.tfstate.*
+
+# terraform.tfvars is gitignored as a general convention (in a real
+# project it can hold environment-specific or sensitive values), even
+# though terraform.tfvars.example (which IS committed) has nothing
+# secret in it for this LocalStack-only setup.
+terraform.tfvars
+
+# Terraform crash logs, if a run ever crashes.
+crash.log
+crash.*.log
+
+# Local CLI override files (not used in this project, but standard to
+# exclude so nobody accidentally commits a personal override).
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# NOTE: .terraform.lock.hcl is deliberately NOT ignored here - it should
+# be committed so every clone of this repo resolves the exact same
+# provider version, keeping `terraform init` reproducible for anyone
+# grading or reviewing this project.

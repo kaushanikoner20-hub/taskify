@@ -68,9 +68,45 @@ services:
     networks:
       - taskify-net
 
+  # ---------------------------------------------------------------------
+  # LocalStack - AWS-compatible emulator, used ONLY by the Terraform
+  # assignment (terraform/) to provision an S3 bucket locally. It is not
+  # wired into the Taskify application itself (frontend/backend never
+  # talk to it) - it exists purely so Terraform has something to talk to.
+  #
+  # As of 2026, LocalStack requires a free personal account + auth token
+  # to start the container at all - this applies to every tag on Docker
+  # Hub, including older/historical ones, not just new releases. Get a
+  # free token at https://app.localstack.cloud/ (no credit card, no real
+  # AWS account needed) and set LOCALSTACK_AUTH_TOKEN in your .env file
+  # (never commit that value - .env is gitignored).
+  # ---------------------------------------------------------------------
+  localstack:
+    image: localstack/localstack:latest
+    container_name: taskify-localstack
+    restart: unless-stopped
+    ports:
+      - "4566:4566"
+    environment:
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN}
+      SERVICES: s3
+      DEBUG: 0
+      DEFAULT_REGION: us-east-1
+    volumes:
+      - taskify_localstack_data:/var/lib/localstack
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+    networks:
+      - taskify-net
+
 networks:
   taskify-net:
     driver: bridge
 
 volumes:
   taskify_db_data:
+  taskify_localstack_data:
