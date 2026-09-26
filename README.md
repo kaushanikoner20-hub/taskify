@@ -213,6 +213,28 @@ hardcoded date anywhere in the code.
 3. **Dashboard:** register an account (SIGN IN tab), log in, and see task cards, progress
    chart, assignments, calendar showing the real current date, and batchmates you've added.
 
+## Screenshots
+
+| Login | Sign In (registration) |
+|---|---|
+| ![Login page](screenshots/login.png) | ![Sign In page](screenshots/sign-in.png) |
+
+| Dashboard | Dashboard (Tasks Progress / Assignments) |
+|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Dashboard scrolled](screenshots/dashboard-progress.png) |
+
+| Track | Projects |
+|---|---|
+| ![Track](screenshots/track.png) | ![Projects](screenshots/projects.png) |
+
+| Reports | Settings |
+|---|---|
+| ![Reports](screenshots/reports.png) | ![Settings](screenshots/settings.png) |
+
+**Support**
+
+![Support](screenshots/support.png)
+
 ## Enabling remote deployment
 
 The `deploy` job in `.github/workflows/ci-cd.yml` is optional and disabled by default — it
@@ -484,6 +506,15 @@ should show. In short:
 2. `docs/terraform-apply.png` — `terraform apply` showing successful creation + outputs
 3. `docs/localstack-s3.png` — `aws --endpoint-url=http://localhost:4566 s3 ls` showing the bucket really exists
 4. `docs/terraform-destroy.png` *(optional)* — `terraform destroy` showing successful teardown
+
+## Task Submissions
+
+Full write-ups for each assignment milestone, including commands, screenshots, and
+debugging notes, are in [`submissions/`](submissions/):
+
+- [Task 1 — Taskify application](submissions/Task1-Taskify-App.docx)
+- [Task 2 — CI/CD pipeline](submissions/Task2-CICD-Pipeline.docx)
+- [Task 3 — Terraform + LocalStack](submissions/Task3-Terraform-LocalStack.docx)
 
 ## Notes on production hardening
 
