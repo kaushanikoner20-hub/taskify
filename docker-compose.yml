@@ -80,10 +80,18 @@ services:
   # free token at https://app.localstack.cloud/ (no credit card, no real
   # AWS account needed) and set LOCALSTACK_AUTH_TOKEN in your .env file
   # (never commit that value - .env is gitignored).
+  #
+  # profiles: [terraform] means this service is deliberately excluded
+  # from a plain `docker compose up` (used to run the Taskify app
+  # itself) - without a token it would otherwise crash-loop forever
+  # printing license errors. It only starts when explicitly requested:
+  # `docker compose up -d localstack` or `docker compose --profile
+  # terraform up -d`.
   # ---------------------------------------------------------------------
   localstack:
-    image: localstack/localstack:latest
+    image: localstack/localstack-pro:latest
     container_name: taskify-localstack
+    profiles: ["terraform"]
     restart: unless-stopped
     ports:
       - "4566:4566"

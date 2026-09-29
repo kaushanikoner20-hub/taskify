@@ -118,9 +118,11 @@ taskify/
 
    This builds the `backend` and `frontend` images (multi-stage builds), starts PostgreSQL,
    waits for its healthcheck to pass, then starts the backend (which creates the database
-   tables on first boot — no demo data is inserted) and finally the frontend. This also
-   starts `localstack`, used only by the separate Terraform assignment — the app itself
-   works exactly the same whether or not `localstack` is running.
+   tables on first boot — no demo data is inserted) and finally the frontend. This command
+   only starts the three services the app actually needs (`db`, `backend`, `frontend`) —
+   `localstack` is used only by the separate Terraform assignment and is deliberately
+   excluded from a plain `docker compose up` (see [Infrastructure Provisioning with
+   Terraform](#infrastructure-provisioning-with-terraform) below for how to start it).
 
 3. Confirm all containers are healthy:
 
@@ -128,8 +130,8 @@ taskify/
    docker ps
    ```
 
-   You should see `taskify-db`, `taskify-backend`, `taskify-frontend`, and `taskify-localstack`
-   all with a `healthy` status once the start-up grace period elapses.
+   You should see `taskify-db`, `taskify-backend`, and `taskify-frontend` all with a
+   `healthy` status once the start-up grace period elapses.
 
 4. Open the app:
 
@@ -212,6 +214,28 @@ hardcoded date anywhere in the code.
 2. **Login page:** open http://localhost:3000 to see the split-screen login/sign-in screen.
 3. **Dashboard:** register an account (SIGN IN tab), log in, and see task cards, progress
    chart, assignments, calendar showing the real current date, and batchmates you've added.
+
+## Screenshots
+
+| Login | Sign In (registration) |
+|---|---|
+| ![Login page](screenshots/login.png) | ![Sign In page](screenshots/sign-in.png) |
+
+| Dashboard | Dashboard (Tasks Progress / Assignments) |
+|---|---|
+| ![Dashboard](screenshots/dashboard.png) | ![Dashboard scrolled](screenshots/dashboard-progress.png) |
+
+| Track | Projects |
+|---|---|
+| ![Track](screenshots/track.png) | ![Projects](screenshots/projects.png) |
+
+| Reports | Settings |
+|---|---|
+| ![Reports](screenshots/reports.png) | ![Settings](screenshots/settings.png) |
+
+**Support**
+
+![Support](screenshots/support.png)
 
 ## Enabling remote deployment
 
@@ -484,6 +508,15 @@ should show. In short:
 2. `docs/terraform-apply.png` — `terraform apply` showing successful creation + outputs
 3. `docs/localstack-s3.png` — `aws --endpoint-url=http://localhost:4566 s3 ls` showing the bucket really exists
 4. `docs/terraform-destroy.png` *(optional)* — `terraform destroy` showing successful teardown
+
+## Task Submissions
+
+Full write-ups for each assignment milestone, including commands, screenshots, and
+debugging notes, are in [`submissions/`](submissions/):
+
+- [Task 1 — Taskify application](submissions/Task1-Taskify-App.docx)
+- [Task 2 — CI/CD pipeline](submissions/Task2-CICD-Pipeline.docx)
+- [Task 3 — Terraform + LocalStack](submissions/Task3-Terraform-LocalStack.docx)
 
 ## Notes on production hardening
 
